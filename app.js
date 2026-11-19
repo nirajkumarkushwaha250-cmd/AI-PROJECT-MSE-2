@@ -8,17 +8,24 @@ function reset(){
   el("status").textContent="Your corrections will appear here.";
   const n=draft.value.trim().split(/\s+/).filter(Boolean).length;
   el("count").textContent=n+" "+(n===1?"word":"words");
-  el("help").textContent=mode.value==="ai"?"AI mode downloads an English correction model on first use. Review its suggestions for meaning.":"Quick rules check common English mistakes on your device.";
+  el("help").textContent=mode.value==="gemini"?"Gemini sends this passage to Google for correction. Up to 12,000 characters.":mode.value==="ai"?"AI mode downloads an English correction model on first use. Review its suggestions for meaning.":"Quick rules check common English mistakes on your device.";
 }
 draft.oninput=mode.onchange=reset;
 el("sample").onclick=()=>{draft.value="she go to the library every day. i study grammer with her.";reset();draft.focus()};
 check.onclick=async()=>{
   const input=draft.value, current=revision;
-  if(!input.trim()){el("status").textContent="Enter some English text first.";draft.focus();return}
+  if(!input.trim()){el("status").textContent="Enter some text first.";draft.focus();return}
   el("result").hidden=true;el("notes").replaceChildren();check.disabled=true;
   try{
     let corrected,notes=[];
-    if(mode.value==="ai"){
+    if(mode.value==="gemini"){
+      el("status").textContent="Checking your passage with Gemini…";
+      const response=await fetch("/api/correct",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text:input})});
+      if(!response.headers.get("content-type")?.includes("application/json"))throw Error("Start this project with python3 server.py.");
+      const result=await response.json();
+      if(!response.ok)throw Error(result.error || "Gemini request failed.");
+      corrected=result.text;
+    }else if(mode.value==="ai"){
       if(input.length>500)throw Error("AI mode supports short passages. Check up to 500 characters at a time.");
       el("status").textContent="Loading the model and checking your draft…";
       const {pipeline,env}=await import("https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2");
@@ -32,7 +39,7 @@ check.onclick=async()=>{
     el("status").textContent=corrected===input?"No changes suggested.":notes.length?notes.length+" suggested edits":"Suggested AI revision";
     for(const note of notes){const item=document.createElement("li");item.textContent=note;el("notes").append(item)}
     el("output").textContent=corrected;el("result").hidden=false;
-  }catch(e){if(current===revision)el("status").textContent=e.message.startsWith("AI mode supports")?e.message:"AI model unavailable. Check your connection or select Quick rules."}
+  }catch(e){if(current===revision)el("status").textContent=mode.value==="gemini" || e.message.startsWith("AI mode supports")?e.message:"AI model unavailable. Check your connection or select Quick rules."}
   finally{check.disabled=false}
 };
 el("copy").onclick=async()=>{try{await navigator.clipboard.writeText(el("output").textContent);el("status").textContent="Corrected text copied."}catch{el("status").textContent="Select the corrected draft and copy it manually."}};

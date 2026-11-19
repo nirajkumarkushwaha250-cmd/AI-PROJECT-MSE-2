@@ -1,15 +1,14 @@
 # AI Grammar Checker
-A browser-based English grammar checker built with HTML, CSS and JavaScript. Quick rules suggest edits with explanations. Optional AI mode uses Transformers.js to download and run a pretrained grammar correction model in the browser.
+Paste a sentence or paragraph and use Gemini to correct grammar, punctuation and spelling while preserving the original language and meaning. Compare the result with your draft and copy it.
 
-## Run on macOS in VS Code
-1. Install Python 3 and open this project folder in VS Code.
-2. Press Command + Shift + B to start the included server task. Alternatively, run `python3 -m http.server 8000 --bind 127.0.0.1` in the integrated terminal.
-3. Open http://127.0.0.1:8000 and select **Try example**, then **Check grammar**.
-4. Stop the server with Ctrl+C in its terminal.
+## Run in VS Code
+1. Open the repository folder in VS Code with Python 3 installed.
+2. Create a Gemini API key at https://aistudio.google.com/apikey.
+3. Run `python3 server.py` in the integrated terminal, or press Command + Shift + B.
+4. At the hidden prompt paste the key and press Enter. The server keeps it in memory. You can also set GEMINI_API_KEY in the server environment beforehand.
+5. Open http://127.0.0.1:8000, choose Gemini, enter your passage and click **Check grammar**. Try “Yesterday she buy two book.” An expected correction is “Yesterday she bought two books.”
+6. Press Ctrl+C in the terminal to stop.
 
-## Source
-- index.html contains the interface and CSS.
-- app.js handles the editor, results, clipboard and optional AI model.
-- checker.js contains the rule-based corrections.
+Gemini sends the submitted passage to Google. Each request accepts up to 12,000 characters. Results can vary. The server defaults to gemini-flash-latest; set GEMINI_MODEL to use another generateContent-compatible model available to your account.
 
-Quick rules cover selected English patterns. AI mode requires an internet connection for the first model download and accepts up to 500 characters per check.
+Quick rules run locally without a key. The optional browser AI model downloads on first use and accepts up to 500 characters. The local Python backend is required for Gemini mode.
