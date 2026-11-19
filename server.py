@@ -33,13 +33,18 @@ GEMINI_ERROR_HINTS = {
 
 
 def correct(text, key):
-    model = quote(os.environ.get("GEMINI_MODEL", "gemini-flash-latest"), safe="")
+    models = ("gemini-flash-latest", "gemini-3.1-flash-lite")
+    selected_model = os.getenv("GEMINI_MODEL", "").strip()
+    if selected_model:
+        models = (selected_model, selected_model)
     payload = {"systemInstruction": {"parts": [{"text": PROMPT}]},
                "contents": [{"role": "user", "parts": [{"text": text}]}]}
-    request = Request(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
-                      data=json.dumps(payload).encode(), headers={"Content-Type": "application/json",
-                                                                "x-goog-api-key": key})
-    for attempt in range(2):
+    body = json.dumps(payload).encode()
+    headers = {"Content-Type": "application/json", "x-goog-api-key": key}
+    for attempt, model in enumerate(models):
+        model_id = quote(model, safe="")
+        request = Request(f"https://generativelanguage.googleapis.com/v1beta/models/{model_id}:generateContent",
+                          data=body, headers=headers)
         try:
             with urlopen(request, timeout=60) as response:
                 result = json.load(response)
