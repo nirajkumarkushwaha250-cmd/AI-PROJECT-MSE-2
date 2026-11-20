@@ -80,7 +80,7 @@ class Handler(BaseHTTPRequestHandler):
         self.respond(200, (ROOT / name).read_bytes(), ASSETS[name])
 
     def do_POST(self):
-        if self.path != "/api/correct":
+        if self.path not in ("/api/correct", "/api/detect"):
             return self.send_error(404)
         port = self.server.server_port
         hosts = {f"127.0.0.1:{port}", f"localhost:{port}"}
@@ -99,6 +99,14 @@ class Handler(BaseHTTPRequestHandler):
                 raise ValueError()
         except (ValueError, UnicodeError):
             return self.respond(400, {"error": "Enter a passage of 1–12,000 characters."})
+        if self.path == "/api/detect":
+            try:
+                import joblib
+                model = joblib.load(ROOT / "Grammar_MLOps" / "champion.joblib")
+                error = bool(model.predict([text.strip()])[0])
+            except (ImportError, OSError, ValueError):
+                return self.respond(503, {"error": "Install the assessment requirements and check the champion model."})
+            return self.respond(200, {"label": "Possible agreement error" if error else "No agreement error flagged"})
         key = os.environ.get("GEMINI_API_KEY")
         if not key:
             return self.respond(503, {"error": "Restart server.py and enter your Gemini API key."})

@@ -1,4 +1,5 @@
 # AI Grammar Checker
+For the KIET assessment, follow [the practical and viva guide](Grammar_MLOps/README.md). The Check agreement button uses a local trainable model.
 Paste a sentence or paragraph and use Gemini to correct grammar, punctuation and spelling while preserving the original language and meaning. Compare the result with your draft and copy it.
 
 ## Run in VS Code

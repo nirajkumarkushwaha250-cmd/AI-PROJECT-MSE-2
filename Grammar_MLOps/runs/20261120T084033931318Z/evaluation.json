@@ -1,0 +1,23 @@
+{
+  "champion_sha256": "abe0c09427dfcb3ef6281e3b42a4cbcc4116a4537714cf9b4b3707b4a4605eae",
+  "incoming_champion": {
+    "accuracy": 0.5277777777777778,
+    "precision": 0.5263157894736842,
+    "recall": 0.5555555555555556,
+    "f1": 0.5405405405405406
+  },
+  "holdout_champion": {
+    "accuracy": 0.875,
+    "precision": 0.875,
+    "recall": 0.875,
+    "f1": 0.875
+  },
+  "holdout_candidate": {
+    "accuracy": 0.9375,
+    "precision": 1.0,
+    "recall": 0.875,
+    "f1": 0.9333333333333333
+  },
+  "rule": "Strict improvement in error-class F1 on the same untouched holdout",
+  "decision": "eligible for promotion"
+}

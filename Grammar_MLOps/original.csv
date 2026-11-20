@@ -1,0 +1,33 @@
+sentence,label
+He goes home.,0
+He go home.,1
+He goes to school.,0
+He go to school.,1
+She works here.,0
+She work here.,1
+She works today.,0
+She work today.,1
+They work here.,0
+They works here.,1
+They work today.,0
+They works today.,1
+We walk home.,0
+We walks home.,1
+We walk outside.,0
+We walks outside.,1
+She is ready.,0
+She are ready.,1
+She is tired.,0
+She are tired.,1
+They are ready.,0
+They is ready.,1
+They are tired.,0
+They is tired.,1
+I am ready.,0
+I is ready.,1
+I am tired.,0
+I is tired.,1
+He has time.,0
+He have time.,1
+He has a pen.,0
+He have a pen.,1

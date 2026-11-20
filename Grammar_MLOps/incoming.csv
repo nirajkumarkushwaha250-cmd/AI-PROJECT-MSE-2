@@ -1,0 +1,25 @@
+sentence,label
+She does homework.,0
+She do homework.,1
+She does yoga.,0
+She do yoga.,1
+They have books.,0
+They has books.,1
+They have time.,0
+They has time.,1
+We are early.,0
+We is early.,1
+We are late.,0
+We is late.,1
+He is early.,0
+He are early.,1
+He is late.,0
+He are late.,1
+She has books.,0
+She have books.,1
+She has time.,0
+She have time.,1
+They do homework.,0
+They does homework.,1
+They do yoga.,0
+They does yoga.,1
